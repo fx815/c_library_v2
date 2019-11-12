@@ -11155,12 +11155,13 @@ static void mavlink_test_optical_flow_tau_theta(uint8_t system_id, uint8_t compo
         uint8_t buffer[MAVLINK_MAX_PACKET_LEN];
         uint16_t i;
     mavlink_optical_flow_tau_theta_t packet_in = {
-        17.0,45.0
+        17.0,45.0,73.0
     };
     mavlink_optical_flow_tau_theta_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
         packet1.tau = packet_in.tau;
         packet1.theta = packet_in.theta;
+        packet1.force = packet_in.force;
         
         
 #ifdef MAVLINK_STATUS_FLAG_OUT_MAVLINK1
@@ -11175,12 +11176,12 @@ static void mavlink_test_optical_flow_tau_theta(uint8_t system_id, uint8_t compo
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_optical_flow_tau_theta_pack(system_id, component_id, &msg , packet1.tau , packet1.theta );
+    mavlink_msg_optical_flow_tau_theta_pack(system_id, component_id, &msg , packet1.tau , packet1.theta , packet1.force );
     mavlink_msg_optical_flow_tau_theta_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_optical_flow_tau_theta_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.tau , packet1.theta );
+    mavlink_msg_optical_flow_tau_theta_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.tau , packet1.theta , packet1.force );
     mavlink_msg_optical_flow_tau_theta_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -11193,7 +11194,7 @@ static void mavlink_test_optical_flow_tau_theta(uint8_t system_id, uint8_t compo
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-    mavlink_msg_optical_flow_tau_theta_send(MAVLINK_COMM_1 , packet1.tau , packet1.theta );
+    mavlink_msg_optical_flow_tau_theta_send(MAVLINK_COMM_1 , packet1.tau , packet1.theta , packet1.force );
     mavlink_msg_optical_flow_tau_theta_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 }

@@ -7,15 +7,16 @@ MAVPACKED(
 typedef struct __mavlink_optical_flow_tau_theta_t {
  float tau; /*< [1/s] V over D, approaching speed divided by distance to wall, equivalent as optical flow divergence*/
  float theta; /*< [degree] approaching angle w.r.t. the wall*/
+ float force; /*< [unit] force representation from force sensor*/
 }) mavlink_optical_flow_tau_theta_t;
 
-#define MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_LEN 8
-#define MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_MIN_LEN 8
-#define MAVLINK_MSG_ID_555_LEN 8
-#define MAVLINK_MSG_ID_555_MIN_LEN 8
+#define MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_LEN 12
+#define MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_MIN_LEN 12
+#define MAVLINK_MSG_ID_555_LEN 12
+#define MAVLINK_MSG_ID_555_MIN_LEN 12
 
-#define MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_CRC 39
-#define MAVLINK_MSG_ID_555_CRC 39
+#define MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_CRC 242
+#define MAVLINK_MSG_ID_555_CRC 242
 
 
 
@@ -23,17 +24,19 @@ typedef struct __mavlink_optical_flow_tau_theta_t {
 #define MAVLINK_MESSAGE_INFO_OPTICAL_FLOW_TAU_THETA { \
     555, \
     "OPTICAL_FLOW_TAU_THETA", \
-    2, \
+    3, \
     {  { "tau", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_optical_flow_tau_theta_t, tau) }, \
          { "theta", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_optical_flow_tau_theta_t, theta) }, \
+         { "force", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_optical_flow_tau_theta_t, force) }, \
          } \
 }
 #else
 #define MAVLINK_MESSAGE_INFO_OPTICAL_FLOW_TAU_THETA { \
     "OPTICAL_FLOW_TAU_THETA", \
-    2, \
+    3, \
     {  { "tau", NULL, MAVLINK_TYPE_FLOAT, 0, 0, offsetof(mavlink_optical_flow_tau_theta_t, tau) }, \
          { "theta", NULL, MAVLINK_TYPE_FLOAT, 0, 4, offsetof(mavlink_optical_flow_tau_theta_t, theta) }, \
+         { "force", NULL, MAVLINK_TYPE_FLOAT, 0, 8, offsetof(mavlink_optical_flow_tau_theta_t, force) }, \
          } \
 }
 #endif
@@ -46,21 +49,24 @@ typedef struct __mavlink_optical_flow_tau_theta_t {
  *
  * @param tau [1/s] V over D, approaching speed divided by distance to wall, equivalent as optical flow divergence
  * @param theta [degree] approaching angle w.r.t. the wall
+ * @param force [unit] force representation from force sensor
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_optical_flow_tau_theta_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-                               float tau, float theta)
+                               float tau, float theta, float force)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_LEN];
     _mav_put_float(buf, 0, tau);
     _mav_put_float(buf, 4, theta);
+    _mav_put_float(buf, 8, force);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_LEN);
 #else
     mavlink_optical_flow_tau_theta_t packet;
     packet.tau = tau;
     packet.theta = theta;
+    packet.force = force;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_LEN);
 #endif
@@ -77,22 +83,25 @@ static inline uint16_t mavlink_msg_optical_flow_tau_theta_pack(uint8_t system_id
  * @param msg The MAVLink message to compress the data into
  * @param tau [1/s] V over D, approaching speed divided by distance to wall, equivalent as optical flow divergence
  * @param theta [degree] approaching angle w.r.t. the wall
+ * @param force [unit] force representation from force sensor
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_optical_flow_tau_theta_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
                                mavlink_message_t* msg,
-                                   float tau,float theta)
+                                   float tau,float theta,float force)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_LEN];
     _mav_put_float(buf, 0, tau);
     _mav_put_float(buf, 4, theta);
+    _mav_put_float(buf, 8, force);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_LEN);
 #else
     mavlink_optical_flow_tau_theta_t packet;
     packet.tau = tau;
     packet.theta = theta;
+    packet.force = force;
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_LEN);
 #endif
@@ -111,7 +120,7 @@ static inline uint16_t mavlink_msg_optical_flow_tau_theta_pack_chan(uint8_t syst
  */
 static inline uint16_t mavlink_msg_optical_flow_tau_theta_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_optical_flow_tau_theta_t* optical_flow_tau_theta)
 {
-    return mavlink_msg_optical_flow_tau_theta_pack(system_id, component_id, msg, optical_flow_tau_theta->tau, optical_flow_tau_theta->theta);
+    return mavlink_msg_optical_flow_tau_theta_pack(system_id, component_id, msg, optical_flow_tau_theta->tau, optical_flow_tau_theta->theta, optical_flow_tau_theta->force);
 }
 
 /**
@@ -125,7 +134,7 @@ static inline uint16_t mavlink_msg_optical_flow_tau_theta_encode(uint8_t system_
  */
 static inline uint16_t mavlink_msg_optical_flow_tau_theta_encode_chan(uint8_t system_id, uint8_t component_id, uint8_t chan, mavlink_message_t* msg, const mavlink_optical_flow_tau_theta_t* optical_flow_tau_theta)
 {
-    return mavlink_msg_optical_flow_tau_theta_pack_chan(system_id, component_id, chan, msg, optical_flow_tau_theta->tau, optical_flow_tau_theta->theta);
+    return mavlink_msg_optical_flow_tau_theta_pack_chan(system_id, component_id, chan, msg, optical_flow_tau_theta->tau, optical_flow_tau_theta->theta, optical_flow_tau_theta->force);
 }
 
 /**
@@ -134,21 +143,24 @@ static inline uint16_t mavlink_msg_optical_flow_tau_theta_encode_chan(uint8_t sy
  *
  * @param tau [1/s] V over D, approaching speed divided by distance to wall, equivalent as optical flow divergence
  * @param theta [degree] approaching angle w.r.t. the wall
+ * @param force [unit] force representation from force sensor
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_optical_flow_tau_theta_send(mavlink_channel_t chan, float tau, float theta)
+static inline void mavlink_msg_optical_flow_tau_theta_send(mavlink_channel_t chan, float tau, float theta, float force)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char buf[MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_LEN];
     _mav_put_float(buf, 0, tau);
     _mav_put_float(buf, 4, theta);
+    _mav_put_float(buf, 8, force);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA, buf, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_MIN_LEN, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_LEN, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_CRC);
 #else
     mavlink_optical_flow_tau_theta_t packet;
     packet.tau = tau;
     packet.theta = theta;
+    packet.force = force;
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA, (const char *)&packet, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_MIN_LEN, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_LEN, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_CRC);
 #endif
@@ -162,7 +174,7 @@ static inline void mavlink_msg_optical_flow_tau_theta_send(mavlink_channel_t cha
 static inline void mavlink_msg_optical_flow_tau_theta_send_struct(mavlink_channel_t chan, const mavlink_optical_flow_tau_theta_t* optical_flow_tau_theta)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-    mavlink_msg_optical_flow_tau_theta_send(chan, optical_flow_tau_theta->tau, optical_flow_tau_theta->theta);
+    mavlink_msg_optical_flow_tau_theta_send(chan, optical_flow_tau_theta->tau, optical_flow_tau_theta->theta, optical_flow_tau_theta->force);
 #else
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA, (const char *)optical_flow_tau_theta, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_MIN_LEN, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_LEN, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_CRC);
 #endif
@@ -176,18 +188,20 @@ static inline void mavlink_msg_optical_flow_tau_theta_send_struct(mavlink_channe
   is usually the receive buffer for the channel, and allows a reply to an
   incoming message with minimum stack space usage.
  */
-static inline void mavlink_msg_optical_flow_tau_theta_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  float tau, float theta)
+static inline void mavlink_msg_optical_flow_tau_theta_send_buf(mavlink_message_t *msgbuf, mavlink_channel_t chan,  float tau, float theta, float force)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     char *buf = (char *)msgbuf;
     _mav_put_float(buf, 0, tau);
     _mav_put_float(buf, 4, theta);
+    _mav_put_float(buf, 8, force);
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA, buf, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_MIN_LEN, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_LEN, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_CRC);
 #else
     mavlink_optical_flow_tau_theta_t *packet = (mavlink_optical_flow_tau_theta_t *)msgbuf;
     packet->tau = tau;
     packet->theta = theta;
+    packet->force = force;
 
     _mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA, (const char *)packet, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_MIN_LEN, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_LEN, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_CRC);
 #endif
@@ -220,6 +234,16 @@ static inline float mavlink_msg_optical_flow_tau_theta_get_theta(const mavlink_m
 }
 
 /**
+ * @brief Get field force from optical_flow_tau_theta message
+ *
+ * @return [unit] force representation from force sensor
+ */
+static inline float mavlink_msg_optical_flow_tau_theta_get_force(const mavlink_message_t* msg)
+{
+    return _MAV_RETURN_float(msg,  8);
+}
+
+/**
  * @brief Decode a optical_flow_tau_theta message into a struct
  *
  * @param msg The message to decode
@@ -230,6 +254,7 @@ static inline void mavlink_msg_optical_flow_tau_theta_decode(const mavlink_messa
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
     optical_flow_tau_theta->tau = mavlink_msg_optical_flow_tau_theta_get_tau(msg);
     optical_flow_tau_theta->theta = mavlink_msg_optical_flow_tau_theta_get_theta(msg);
+    optical_flow_tau_theta->force = mavlink_msg_optical_flow_tau_theta_get_force(msg);
 #else
         uint8_t len = msg->len < MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_LEN? msg->len : MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_LEN;
         memset(optical_flow_tau_theta, 0, MAVLINK_MSG_ID_OPTICAL_FLOW_TAU_THETA_LEN);
